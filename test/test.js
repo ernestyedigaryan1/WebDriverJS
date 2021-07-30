@@ -1,10 +1,10 @@
-const {Builder, By, Key} = require('selenium-webdriver');
-require('chromedriver');
+const {Builder, By, Key, until} = require('selenium-webdriver');
+// require('chromedriver');
 
 const baseUrl = 'https://www.boden.co.uk/'
 const locators = {
     Header: {
-        SearchIcon: '.header-rd__after-nav-wrapper .header-rd__search',
+        SearchIcon: '//div[@class="header-rd__mobile-flyout-wrapper"]//button[@class="header-rd__search"]',
         SearchField: '.search-panel__input',
         LogoImage: 'a.header-rd__logo',
         UserProfileIcon: '.header-rd__account',
@@ -26,8 +26,9 @@ async function example() {
     try {
         driver.manage().window().maximize();
         await driver.get(baseUrl);
-        await driver.findElement(By.css(locators.Header.SearchIcon)).click();
+        await driver.findElement(By.xpath(locators.Header.SearchIcon)).click();
         await driver.findElement(By.css(locators.Header.SearchField)).sendKeys('Dress', Key.ENTER);
+        await driver.wait(until.elementLocated(By.css(locators.ProductGrid.FirstProductCard)), 5000)
         await driver.findElement(By.css(locators.ProductGrid.FirstProductCard)).click();
         await driver.findElement(By.css(locators.ProductDetailsPage.ProductTitle)).isDisplayed();
         await driver.findElement(By.css(locators.Header.LogoImage)).click();
